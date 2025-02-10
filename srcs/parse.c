@@ -6,7 +6,7 @@
 /*   By: gumendes <gumendes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:51:07 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/06 15:52:53 by gumendes         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:33:33 by gumendes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,18 @@ void	check_args(char **av)
 	free(tmp);
 }
 
-char	**parse_args(int ac, char **av)
+char	**parse_args(char *av1, char *av2)
 {
 	char	**cmd;
 
-	cmd = malloc((ac + 1) * sizeof(char *));
+	cmd = malloc(3 * sizeof(char *));
 	if (!cmd)
 	{
 		perror("Malloc");
-		exit (0);
+		exit (1);
 	}
-	cmd[0] = ft_strdup(av[1]);
-	cmd[1] = ft_strjoin("/bin/", av[2]);
-	cmd[2] = ft_strjoin("/bin/", av[3]);
-	cmd[3] = ft_strdup(av[4]);
-	cmd[4] = NULL;
+	cmd[0] = ft_strjoin("/bin/", av2);
+	cmd[1] = ft_strdup(av1);
+	cmd[2] = NULL;
 	return (cmd);
 }
