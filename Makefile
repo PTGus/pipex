@@ -6,7 +6,7 @@
 #    By: gumendes <gumendes@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/03 15:03:32 by gumendes          #+#    #+#              #
-#    Updated: 2025/02/10 17:17:16 by gumendes         ###   ########.fr        #
+#    Updated: 2025/02/12 10:54:20 by gumendes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME		=	pipex
 
 SRC_PATH	=	srcs
 
-SRC			=	$(SRC_PATH)/main.c $(SRC_PATH)/parse.c
+SRC			=	$(SRC_PATH)/main.c $(SRC_PATH)/utils.c
 
 OBJ			=	$(SRC:.c=.o)
 
@@ -50,11 +50,11 @@ $(PRINTF_PATH):
 
 # Build the libft library
 $(LIBFT): $(LIBFT_PATH)
-	$(MAKE) -C $(LIBFT_PATH)
+	@$(MAKE) -C $(LIBFT_PATH)
 
 # Build the printf library
 $(PRINTF): $(PRINTF_PATH)
-	$(MAKE) -C $(PRINTF_PATH)
+	@$(MAKE) -C $(PRINTF_PATH)
 
 # Build the pipex program
 $(NAME): $(OBJ) $(LIBFT) $(PRINTF)
@@ -62,15 +62,15 @@ $(NAME): $(OBJ) $(LIBFT) $(PRINTF)
 
 # Clean object files
 clean:
-	$(RM) $(OBJ)
-	$(MAKE) -C $(LIBFT_PATH) clean
-	$(MAKE) -C $(PRINTF_PATH) clean
+	@$(RM) $(OBJ)
+	@$(RM) $(LIBFT_PATH)/.build
+	@$(RM) $(PRINTF_PATH)/.build
 
 # Full clean
 fclean: clean
-	$(RM) $(NAME)
-	@if [ -d "$(LIBFT_PATH)" ]; then $(RM) $(LIBFT_PATH); fi
-	@if [ -d "$(PRINTF_PATH)" ]; then $(RM) $(PRINTF_PATH); fi
+	@$(RM) $(NAME)
+	@$(RM) $(LIBFT_PATH)
+	@$(RM) $(PRINTF_PATH)
 
 re: fclean all
 

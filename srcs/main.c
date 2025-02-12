@@ -6,181 +6,110 @@
 /*   By: gumendes <gumendes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 12:24:23 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/10 14:33:31 by gumendes         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:01:47 by gumendes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-/* int main(int ac, char **av, char **env)
-{
-	int		pipe_fd1[2];
-	int		pipe_fd2[2];
-	int		bytes;
-	char	*buf;
-	char	**cmd1;
-	char	**cmd2;
-	pid_t	pid1;
-	pid_t	pid2;
+void	run_parent(char **av, int *pipe_fd, char **env);
+void	run_child(char **av, int *pipe_fd, char **env);
+void	do_cmd(char *cmd, char **env);
+void	error_handler(void);
 
-	if (ac < 5)
-	{
-		ft_putstr_fd("Insufficient arguments.\n", 2);
-		return (1);
-	}
-	check_args(av);
-	pid1 = fork();
-	if (pid1 < 0)
-	{
-		perror("Fork");
-		return (1);
-	}
-	else if (pid1 == 0)
-	{
-		pipe(pipe_fd1);
-		close(pipe_fd1[0]);
-		dup2(pipe_fd1[1], STDOUT_FILENO);
-		close(pipe_fd1[1]);
-		cmd1 = parse_args(av[1], av[2]);
-		if (execve(cmd1[0], cmd1, env) == -1)
-		{
-			perror("Execve");
-			return (1);
-		}
-	}
-	else
-	{
-		pid2 = fork();
-		if (pid2 < 0)
-		{
-			perror("Fork pid2");
-			return (1);
-		}
-		else if (pid2 == 0)
-		{
-			close(pipe_fd1[1]);
-			dup2(pipe_fd1[0],STDIN_FILENO);
-			close(pipe_fd1[0]);
-			pipe(pipe_fd2);
-			if (pipe_fd2 < 0)
-			{
-				perror("Pipe2");
-				return (1);
-			}
-			close(pipe_fd2[0]);
-			dup2(pipe_fd2[1], STDOUT_FILENO);
-			close(pipe_fd2[1]);
-			cmd2 = parse_args(av);
-		}
-	}
-} */
-
-int	main()
+int	main(int ac, char **av, char **env)
 {
-	printf("ola");
+	int		pipe_fd[2];
+	pid_t	pid;
+
+	if (ac != 5)
+		error_handler();
+	if (pipe(pipe_fd) == -1)
+		exit(1);
+	pid = fork();
+	if (pid == -1)
+		exit(1);
+	if (pid == 0)
+		run_child(av, pipe_fd, env);
+	else if (pid > 0)
+		run_parent(av, pipe_fd, env);
+	return (0);
 }
 
-// int main(int ac, char **av, char **env)
-// {
-// 	int pipe_fd1[2];
-// 	int file_fd;
-// 	char *buf;
-// 	int bytes;
-// 	pid_t pid;
-// 	char **cmd1;
+void	do_cmd(char *cmd, char **env)
+{
+	char	**split_cmd;
+	char	*path;
 
-// 	if (pipe(pipe_fd1) < 0)
-// 	{
-// 		perror("pipe");
-// 		return 1;
-// 	}
-// 	if (ac < 5)
-// 	{
-// 		ft_putstr_fd("Insufficient arguments.\n", 2);
-// 		return 1;
-// 	}
-// 	check_args(av);
-// 	cmd1 = parse_args(ac, av[1], av[2]);
-// 	pid = fork();
-// 	if (pid < 0)
-// 	{
-// 		perror("fork");
-// 		return 1;
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		int k = 0;
-// 		while (cmd1[k])
-// 		{
-// 			printf("%s\n", cmd1[k]);
-// 			k++;
-// 		}
-// 		close(pipe_fd1[0]);
-// 		dup2(pipe_fd1[1], STDOUT_FILENO);
-// 		close(pipe_fd1[1]);
-// 		execve(cmd1[0], cmd1, env);
-// 		perror("execve");
-// 		return 1;
-// 	}
-// 	else
-// 	{
-// 		buf = malloc(sizeof(char) * (BUF_SIZE + 1));
-// 		if (buf == NULL)
-// 		{
-// 			perror("malloc");
-// 			return 1;
-// 		}
-// 		close(pipe_fd1[1]);
-// 		file_fd = open("output.txt", O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
-// 		if (file_fd == -1)
-// 		{
-// 			perror("open");
-// 			free(buf);
-// 			return 1;
-// 		}
-// 		bytes = 1;
-// 		char *str = malloc(sizeof(char));
-// 		if (str == NULL)
-// 		{
-// 			perror("malloc");
-// 			free(buf);
-// 			close(pipe_fd1[0]);
-// 			close(file_fd);
-// 			return 1;
-// 		}
-// 		str[0] = '\0';
-// 		int r_amm = 0;
-// 		while (bytes > 0)
-// 		{
-// 			bytes = read(pipe_fd1[0], buf, BUF_SIZE);
-// 			if (bytes < 0)
-// 			{
-// 				perror("read");
-// 				free(buf);
-// 				free(str);
-// 				close(pipe_fd1[0]);
-// 				close(file_fd);
-// 				return 1;
-// 			}
-// 			buf[bytes] = '\0';
-// 			r_amm += bytes;
-// 			str = ft_strjoin(str, buf);
-// 			if (!str)
-// 			{
-// 				perror("ft_strjoin");
-// 				free(buf);
-// 				close(pipe_fd1[0]);
-// 				close(file_fd);
-// 				return 1;
-// 			}
-// 		}
-// 		printf("%s\n", str);
-// 		write(file_fd, str, r_amm);
-// 		free(buf);
-// 		free(str);
-// 		close(pipe_fd1[0]);
-// 		close(file_fd);
-// 		wait(NULL);
-// 	}
-// 	return 0;
-// }
+	split_cmd = ft_split(cmd, ' ');
+	path = pather(split_cmd[0], env);
+	if (execve(path, split_cmd, env) == -1)
+	{
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(split_cmd[0], 2);
+		ft_free_split(split_cmd);
+		exit(0);
+	}
+}
+
+void	run_parent(char **av, int *pipe_fd, char **env)
+{
+	int	fd;
+
+	fd = open_file(av[4], 1);
+	if (fd == -1)
+	{
+		perror("open failed");
+		exit(1);
+	}
+	close(pipe_fd[1]);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+	{
+		perror("dup2 for STDIN failed");
+		exit(1);
+	}
+	close(pipe_fd[0]);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2 for STDOUT failed");
+		exit(1);
+	}
+	close(fd);
+	do_cmd(av[3], env);
+}
+
+void	run_child(char **av, int *pipe_fd, char **env)
+{
+	int	fd;
+
+	fd = open_file(av[1], 0);
+	if (fd == -1)
+	{
+		perror("open failed");
+		exit(1);
+	}
+	close(pipe_fd[0]);
+	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	{
+		perror("dup2 for STDOUT failed");
+		exit(1);
+	}
+	close(pipe_fd[1]);
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2 for STDIN failed");
+		exit(1);
+	}
+	close(fd);
+	do_cmd(av[2], env);
+}
+
+/**
+ * @brief Writes on the stderr the instruction
+ *  on how to run the program and exits.
+ */
+void	error_handler(void)
+{
+	ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
+	exit (0);
+}
