@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:53:13 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/13 13:28:12 by marvin           ###   ########.fr       */
+/*   Updated: 2025/02/13 15:07:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include <signal.h>
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -98,9 +99,9 @@ char	*pather(char *cmd, char **env)
 		}
 		free(exec);
 	}
-	ft_free_split(split_cmds);
 	ft_free_split(all_paths);
-	return (cmd);
+	ft_free_split(split_cmds);
+	return (ft_strdup(cmd));
 }
 
 void	ft_free_split(char **str)
