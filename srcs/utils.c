@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gumendes <gumendes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:53:13 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/12 15:36:35 by gumendes         ###   ########.fr       */
+/*   Updated: 2025/02/13 13:21:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-/**
- * @brief Compares all the characters of two
- *  strings and returns the difference between them.
- * @return If return is 0 strings are equal, any
- *  non 0 return means the strings are different.
- */
-int		ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int i;
 
@@ -30,13 +24,6 @@ int		ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-/**
- * @brief Checks whether it is possible to
- *  open an input file (0) and read from it.
- *  Or if an output file (1) exists and is writable,
- *  if so truncates it, if the file is non existant creates it.
- * @return The file descriptor to the required file, or -1 if unsuccessful.
- */
 int	open_file(char *file, int in_out)
 {
 	int	fd;
@@ -63,10 +50,6 @@ int	open_file(char *file, int in_out)
 	return (fd);
 }
 
-/**
- * @brief Searches the environment list to find the environment variable name,
- *  and returns a pointer to the corresponding value string.
- */
 char	*ft_getenv(char *name, char **env)
 {
 	int		i;
@@ -91,11 +74,6 @@ char	*ft_getenv(char *name, char **env)
 	return (NULL);
 }
 
-/**
- * @brief  Searches for an executable by checking
- *  directories in the PATH environment variable.
- * @return The full path if found; otherwise, it returns the original command.
- */
 char	*pather(char *cmd, char **env)
 {
 	int		i;
@@ -120,14 +98,11 @@ char	*pather(char *cmd, char **env)
 		}
 		free(exec);
 	}
-	free(split_cmds);
-	free(all_paths);
+	ft_free_split(split_cmds);
+	ft_free_split(all_paths);
 	return (cmd);
 }
 
-/**
- * @brief Frees all the memory allocated to a array of strings and it's contents.
- */
 void	ft_free_split(char **str)
 {
 	int	i;

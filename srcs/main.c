@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gumendes <gumendes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 12:24:23 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/12 16:01:47 by gumendes         ###   ########.fr       */
+/*   Updated: 2025/02/13 13:21:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	do_cmd(char *cmd, char **env)
 		ft_free_split(split_cmd);
 		exit(0);
 	}
+	ft_free_split(split_cmd);
 }
 
 void	run_parent(char **av, int *pipe_fd, char **env)
@@ -104,10 +105,6 @@ void	run_child(char **av, int *pipe_fd, char **env)
 	do_cmd(av[2], env);
 }
 
-/**
- * @brief Writes on the stderr the instruction
- *  on how to run the program and exits.
- */
 void	error_handler(void)
 {
 	ft_putstr_fd("./pipex file1 cmd1 cmd2 file2\n", 2);
