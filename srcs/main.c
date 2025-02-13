@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 12:24:23 by gumendes          #+#    #+#             */
-/*   Updated: 2025/02/13 13:21:34 by marvin           ###   ########.fr       */
+/*   Updated: 2025/02/13 13:49:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	do_cmd(char *cmd, char **env)
 		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(split_cmd[0], 2);
 		ft_free_split(split_cmd);
-		exit(0);
+		return ;
 	}
 	ft_free_split(split_cmd);
 }
